@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+task.db
+uploads/
+.env
+terminal.py
