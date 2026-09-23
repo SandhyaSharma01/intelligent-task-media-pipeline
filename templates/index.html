@@ -1,176 +1,1923 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Intelligent Task & Media Processing Pipeline</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Intelligent Task Pipeline</title>
+
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
         }
+
 
         body {
-            background: #f4f7fb;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #1f2937;
         }
 
-        .container {
-            width: 100%;
-            max-width: 750px;
-            background: white;
-            padding: 40px;
-            border-radius: 18px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 25px 40px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
 
-        .header h1 {
-            font-size: 30px;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 15px;
-        }
-
-        .task-card {
-            background: #f8fafc;
-            border-radius: 14px;
-            padding: 22px;
-            margin-bottom: 25px;
-        }
-
-        .task-card h2 {
-            margin-bottom: 12px;
-        }
-
-        .task-info {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            background: #e8eef7;
-            padding: 7px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-        }
-
-        .upload-box {
-            border: 2px dashed #b8c2d1;
-            border-radius: 14px;
-            padding: 35px 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .upload-box h3 {
+        header h1 {
             margin-bottom: 8px;
         }
 
-        .upload-box p {
-            color: #777;
-            font-size: 14px;
-            margin-bottom: 20px;
+
+        header p {
+            color: #d1d5db;
         }
 
-        input[type="file"] {
-            margin-bottom: 20px;
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
         }
 
-        button {
-            width: 100%;
-            padding: 13px;
+
+        .navigation {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+
+        .nav-btn {
             border: none;
-            border-radius: 9px;
-            background: #2563eb;
+            padding: 12px 18px;
+            border-radius: 8px;
+            background: #e5e7eb;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: #111827;
             color: white;
-            font-size: 16px;
+        }
+
+
+        .page {
+            display: none;
+        }
+
+
+        .page.active {
+            display: block;
+        }
+
+
+        .stats {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(200px, 1fr));
+
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+
+        .stat-title {
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 20px;
+        }
+
+
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            cursor: pointer;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.08);
+
+            transition: 0.2s;
+        }
+
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+        }
+
+
+        .feature-icon {
+            font-size: 35px;
+            margin-bottom: 15px;
+        }
+
+
+        .feature-card h2 {
+            margin-bottom: 8px;
+        }
+
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+
+            font-size: 15px;
+        }
+
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+
+        button.primary {
+            border: none;
+            background: #111827;
+            color: white;
+
+            padding: 12px 20px;
+            border-radius: 8px;
+
             cursor: pointer;
         }
 
-        button:hover {
-            background: #1d4ed8;
+
+        button.primary:hover {
+            background: #374151;
         }
 
-        .footer {
-            text-align: center;
-            margin-top: 25px;
-            color: #888;
-            font-size: 13px;
+
+        .task-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, 0.06);
         }
+
+
+        .task-actions {
+            margin-top: 15px;
+
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+
+            background: #f3f4f6;
+            border-radius: 8px;
+
+            white-space: pre-wrap;
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <div class="container">
 
-        <div class="header">
-            <h1>Intelligent Task & Media Processing Pipeline</h1>
-            <p>Upload and process media files for your task</p>
-        </div>
+<header>
+
+    <h1>Intelligent Task Pipeline</h1>
+
+    <p>
+        AI-powered task and media processing system
+    </p>
+
+</header>
 
 
-        <div class="task-card">
-            <h2>📋 Task 1</h2>
+<div class="container">
 
-            <p><strong>Study Python</strong></p>
 
-            <br>
+    <!-- =========================
+         NAVIGATION
+    ========================== -->
 
-            <div class="task-info">
-                <span class="tag">Priority: High</span>
-                <span class="tag">Status: Pending</span>
+    <nav class="navigation">
+
+        <button class="nav-btn active"
+                onclick="showPage('dashboard', this)">
+            Dashboard
+        </button>
+
+
+        <button class="nav-btn"
+                onclick="showPage('tasks', this)">
+            Tasks
+        </button>
+
+
+        <button class="nav-btn"
+                onclick="showPage('text-task', this)">
+            Text → Task
+        </button>
+
+
+        <button class="nav-btn"
+                onclick="showPage('voice-task', this)">
+            Voice → Task
+        </button>
+
+
+        <button class="nav-btn"
+                onclick="showPage('audio-text', this)">
+            Audio → Text
+        </button>
+
+
+        <button class="nav-btn"
+                onclick="showPage('text-audio', this)">
+            Text → Audio
+        </button>
+
+
+        <button class="nav-btn"
+                onclick="showPage('media', this)">
+            Media Processing
+        </button>
+
+    </nav>
+
+
+
+    <!-- =========================
+         DASHBOARD
+    ========================== -->
+
+    <section id="dashboard"
+             class="page active">
+
+        <h2>Dashboard</h2>
+
+
+        <div class="stats">
+
+
+            <div class="card">
+
+                <div class="stat-title">
+                    Total Tasks
+                </div>
+
+                <div id="totalTasks"
+                     class="stat-number">
+                    0
+                </div>
+
             </div>
+
+
+
+            <div class="card">
+
+                <div class="stat-title">
+                    Pending Tasks
+                </div>
+
+                <div id="pendingTasks"
+                     class="stat-number">
+                    0
+                </div>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <div class="stat-title">
+                    Completed Tasks
+                </div>
+
+                <div id="completedTasks"
+                     class="stat-number">
+                    0
+                </div>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <div class="stat-title">
+                    High Priority
+                </div>
+
+                <div id="highPriorityTasks"
+                     class="stat-number">
+                    0
+                </div>
+
+            </div>
+
+
         </div>
 
 
-        <form action="/tasks/1/upload"
-              method="POST"
-              enctype="multipart/form-data">
 
-            <div class="upload-box">
+        <!-- FEATURE CARDS -->
 
-                <h3>📁 Upload Media</h3>
+        <div class="feature-grid">
+
+
+            <div class="feature-card"
+                 onclick="showPageByName('tasks')">
+
+                <div class="feature-icon">
+                    📋
+                </div>
+
+                <h2>Tasks</h2>
 
                 <p>
-                    Select an image or other media file from your computer
+                    Create, view, update and
+                    delete tasks.
                 </p>
-
-                <input type="file"
-                       name="file"
-                       required>
 
             </div>
 
-            <button type="submit">
-                Upload & Process
-            </button>
-
-        </form>
 
 
-        <div class="footer">
-            Intelligent Task & Media Processing Pipeline
+            <div class="feature-card"
+                 onclick="showPageByName('text-task')">
+
+                <div class="feature-icon">
+                    🧠
+                </div>
+
+                <h2>Text → Task</h2>
+
+                <p>
+                    Convert natural language
+                    into structured tasks.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature-card"
+                 onclick="showPageByName('voice-task')">
+
+                <div class="feature-icon">
+                    🎤
+                </div>
+
+                <h2>Voice → Task</h2>
+
+                <p>
+                    Convert spoken instructions
+                    into tasks.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature-card"
+                 onclick="showPageByName('audio-text')">
+
+                <div class="feature-icon">
+                    🎧
+                </div>
+
+                <h2>Audio → Text</h2>
+
+                <p>
+                    Transcribe uploaded audio
+                    using Whisper.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature-card"
+                 onclick="showPageByName('text-audio')">
+
+                <div class="feature-icon">
+                    🔊
+                </div>
+
+                <h2>Text → Audio</h2>
+
+                <p>
+                    Convert text into speech.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature-card"
+                 onclick="showPageByName('media')">
+
+                <div class="feature-icon">
+                    📁
+                </div>
+
+                <h2>Media Processing</h2>
+
+                <p>
+                    Process images, PDFs,
+                    text and audio.
+                </p>
+
+            </div>
+
+
         </div>
 
-    </div>
+    </section>
+
+
+
+    <!-- =========================
+         TASK MANAGEMENT
+    ========================== -->
+
+    <section id="tasks"
+             class="page">
+
+        <h2>Task Management</h2>
+
+
+        <!-- CREATE TASK -->
+
+        <div class="card">
+
+            <h3>Create New Task</h3>
+
+
+            <input
+                type="text"
+                id="taskTitle"
+                placeholder="Enter task title"
+            >
+
+
+            <textarea
+                id="taskDescription"
+                placeholder="Enter task description"
+            ></textarea>
+
+
+            <select id="taskPriority">
+
+                <option value="low">
+                    Low Priority
+                </option>
+
+                <option value="medium"
+                        selected>
+                    Medium Priority
+                </option>
+
+                <option value="high">
+                    High Priority
+                </option>
+
+            </select>
+            
+            <label for="taskDueDate">Due Date</label>
+              
+              <input
+                 type="date"
+                 id="taskDueDate"
+                 >
+
+            <button
+                class="primary"
+                onclick="createTask()">
+
+                Create Task
+
+            </button>
+
+
+            <div
+                id="createTaskResult"
+                class="result">
+            </div>
+
+        </div>
+
+
+        <br>
+
+
+        <!-- ALL TASKS -->
+
+        <div class="card">
+
+            <h3>All Tasks</h3>
+
+
+            <button
+                class="primary"
+                onclick="loadTasks()">
+
+                Refresh Tasks
+
+            </button>
+
+
+            <div
+                id="taskList"
+                style="margin-top: 20px;">
+            </div>
+
+        </div>
+                <!-- UPDATE TASK FORM -->
+
+            <div class="card" id="updateTaskForm" style="display: none;">
+
+           <h3>Update Task</h3>
+
+           <input
+             type="text"
+             id="updateTaskTitle"
+             placeholder="Enter new title"
+                                           >
+ 
+              <textarea
+            id="updateTaskDescription"
+            placeholder="Enter new description"
+             ></textarea>
+
+              <select id="updateTaskPriority">
+               <option value="low">Low Priority</option>
+               <option value="medium" selected>Medium Priority</option>
+               <option value="high">High Priority</option>
+               </select> 
+
+              <select id="updateTaskStatus">
+              <option value="pending">Pending</option>
+              <option value="in progress">In Progress</option>
+              <option value="done">Done</option>
+                </select>
+
+             <button
+                 class="primary"
+                  onclick="saveUpdatedTask()">
+
+                Save Update
+
+                 </button>
+
+                 <button
+                  class="primary"
+                   onclick="cancelUpdate()">
+
+                      Cancel
+
+                   </button>
+
+                 </div>
+                </section>
+
+
+
+    <!-- =========================
+         TEXT → TASK
+    ========================== -->
+
+    <section id="text-task"
+             class="page">
+
+        <h2>Text → Task</h2>
+
+
+        <div class="card">
+
+            <p style="color: #6b7280; margin-bottom: 15px;">
+
+                Describe your task naturally and the system
+                will convert it into a structured task.
+
+            </p>
+
+
+            <textarea
+                id="textTaskInput"
+                placeholder="Example: I need to study Python tomorrow at 6 PM with high priority."
+            ></textarea>
+
+
+            <button
+                class="primary"
+                onclick="createTaskFromText()">
+
+                Create Task From Text
+
+            </button>
+
+
+            <div
+                id="textTaskResult"
+                class="result">
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         VOICE → TASK
+    ========================== -->
+
+    <section id="voice-task"
+             class="page">
+
+        <h2>Voice → Task</h2>
+
+
+        <div class="card">
+
+            <p style="color: #6b7280; margin-bottom: 15px;">
+
+                Upload a voice recording containing
+                your task instruction.
+
+            </p>
+
+
+            <input
+                type="file"
+                id="voiceTaskAudio"
+                accept="audio/*"
+            >
+
+
+            <br><br>
+
+
+            <button
+                class="primary"
+                onclick="createVoiceTask()">
+
+                Create Task From Voice
+
+            </button>
+
+
+            <div
+                id="voiceTaskResult"
+                class="result">
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         AUDIO → TEXT
+    ========================== -->
+
+    <section id="audio-text"
+             class="page">
+
+        <h2>Audio → Text</h2>
+
+
+        <div class="card">
+
+            <p style="color: #6b7280; margin-bottom: 15px;">
+
+                Upload an audio file and Whisper will
+                transcribe the spoken content into text.
+
+            </p>
+
+
+            <input
+                type="file"
+                id="audioTextFile"
+                accept="audio/*"
+            >
+
+
+            <br><br>
+
+
+            <button
+                class="primary"
+                onclick="convertAudioToText()">
+
+                Convert Audio to Text
+
+            </button>
+
+
+            <div
+                id="audioTextResult"
+                class="result">
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         TEXT → AUDIO
+    ========================== -->
+
+    <section id="text-audio"
+             class="page">
+
+        <h2>Text → Audio</h2>
+
+
+        <div class="card">
+
+            <p style="color: #6b7280; margin-bottom: 15px;">
+
+                Enter text and convert it into
+                spoken audio.
+
+            </p>
+
+
+            <textarea
+                id="textAudioInput"
+                placeholder="Enter the text you want to convert into speech..."
+            ></textarea>
+
+
+            <button
+                class="primary"
+                onclick="convertTextToAudio()">
+
+                Generate Audio
+
+            </button>
+
+
+            <div
+                id="textAudioResult"
+                class="result">
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         MEDIA PROCESSING
+    ========================== -->
+
+    <section id="media"
+             class="page">
+
+        <h2>Media Processing</h2>
+
+
+        <div class="card">
+
+            <p style="color: #6b7280; margin-bottom: 15px;">
+
+                Upload an image, PDF, text or CSV file
+                and process it for a specific task.
+
+            </p>
+
+
+            <!-- TASK ID -->
+
+            <input
+                type="number"
+                id="mediaTaskId"
+                placeholder="Enter Task ID"
+                min="1"
+            >
+
+
+            <!-- MEDIA FILE -->
+
+            <input
+                type="file"
+                id="mediaFile"
+                accept=".jpg,.jpeg,.png,.gif,.pdf,.txt,.csv"
+            >
+
+
+            <br><br>
+
+
+            <!-- PROCESS BUTTON -->
+
+            <button
+                class="primary"
+                onclick="processMedia()">
+
+                Process Media
+
+            </button>
+
+
+            <!-- RESULT -->
+
+            <div
+                id="mediaResult"
+                class="result">
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+
+        /* =========================
+           PAGE NAVIGATION
+        ========================== */
+
+        function showPage(pageId, button) {
+
+            // Hide all pages
+
+            document
+                .querySelectorAll(".page")
+                .forEach(function(page) {
+
+                    page.classList.remove("active");
+
+                });
+
+
+            // Show selected page
+
+            document
+                .getElementById(pageId)
+                .classList.add("active");
+
+
+            // Remove active state from all buttons
+
+            document
+                .querySelectorAll(".nav-btn")
+                .forEach(function(btn) {
+
+                    btn.classList.remove("active");
+
+                });
+
+
+            // Add active state to clicked button
+
+            if (button) {
+
+                button.classList.add("active");
+
+            }
+
+        }
+
+
+
+        function showPageByName(pageId) {
+
+            showPage(pageId);
+
+        }
+
+
+
+        /* =========================
+           LOAD ALL TASKS
+        ========================== */
+
+        async function loadTasks() {
+                  
+            try {
+
+                const response =
+                    await fetch("/api/tasks");
+               
+
+                const tasks =
+                    await response.json();
+
+
+                const taskList =
+                    document.getElementById("taskList");
+
+
+                taskList.innerHTML = "";
+
+
+                tasks.forEach(function(task) {
+
+                    const div =
+                        document.createElement("div");
+
+
+                    div.className =
+                        "task-item";
+
+
+                    div.innerHTML = `
+
+                        <h3>
+                            ID: ${task.id}
+                        </h3>
+
+                        <p>
+                            <strong>Title:</strong>
+                            ${task.title}
+                        </p>
+
+                        <p>
+                            <strong>Descriptiond:</strong>
+                            ${task.description || ""}
+                        </p>
+
+                        <p>
+                            <strong>Priority:</strong>
+                            ${task.priority}
+                        </p>
+
+                        <p>
+                              <strong>Due Date:</strong>
+                              ${task.due_date || "Not Set"}
+                        </p>
+
+                        <div class="task-actions">
+                            <button
+                               class="primary"
+                               onclick="updateTask(${task.id})">
+                               
+                               Update
+                            
+                            </button>
+
+                            <button
+                                class="primary"
+                                onclick="deleteTask(${task.id})">
+
+                                Delete
+
+                            </button>
+
+                        </div>
+
+                    `;
+
+
+                    taskList.appendChild(div);
+
+                });
+
+
+                updateDashboard(tasks);
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to load tasks."
+                );
+
+            }
+
+        }
+
+
+
+        /* =========================
+           CREATE TASK
+        ========================== */
+
+        async function createTask() {
+
+            const title =
+                document
+                    .getElementById("taskTitle")
+                    .value
+                    .trim();
+
+
+            const description =
+                document
+                    .getElementById("taskDescription")
+                    .value
+                    .trim();
+
+
+            const priority =
+                document
+                    .getElementById("taskPriority")
+                    .value;
+
+            const dueDate = 
+                 document
+                       .getElementById("taskDueDate")
+                       .value;
+
+            if (!title) {
+
+                alert(
+                    "Task title is required."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch("/api/tasks", {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body: JSON.stringify({
+
+                            title: title,
+
+                            description:
+                                description,
+
+                            priority:
+                                priority,
+                            
+                            due_date:  
+                                    dueDate  
+                        })
+
+                    });
+
+
+                const result =
+                    await response.json();
+
+
+                document
+                    .getElementById(
+                        "createTaskResult"
+                    )
+                    .textContent =
+                    JSON.stringify(
+                        result,
+                        null,
+                        2
+                    );
+
+
+                document
+                    .getElementById(
+                        "taskTitle"
+                    )
+                    .value = "";
+
+
+                document
+                    .getElementById(
+                        "taskDescription"
+                    )
+                    .value = "";
+
+
+                await loadTasks();
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to create task."
+                );
+
+            }
+
+        }
+
+        /* =======================
+            UPDATE TASK
+        ========================= */
+          let currentUpdateTaskId = null;    
+            function updateTask(taskId) {
+
+            currentUpdateTaskId = taskId;
+
+            document.getElementById("updateTaskForm").style.display = "block";
+
+            window.scrollTo({
+                top: document.getElementById("updateTaskForm").offsetTop,
+                behavior: "smooth"
+                     });
+            }
+        
+        /* ========================
+              SAVE UPDATE
+        ======================== */
+   
+          async function saveUpdatedTask() {
+
+             const title =
+             document.getElementById("updateTaskTitle").value.trim();
+
+             const description =
+              document.getElementById("updateTaskDescription").value.trim();
+
+             const priority =
+              document.getElementById("updateTaskPriority").value;
+
+             const status =
+               document.getElementById("updateTaskStatus").value;
+
+
+               if (!title) {
+                alert("Task title is required.");
+                return;
+               }
+
+
+              try {
+
+                 const response = await fetch(
+                 `/api/tasks/${currentUpdateTaskId}`,
+               {
+                   method: "PUT",
+
+                  headers: {
+                    "Content-Type": "application/json"
+                   },
+
+                    body: JSON.stringify({
+                    title: title,
+                    description: description,
+                    priority: priority,
+                    status: status
+                })
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error || "Failed to update task"
+            );
+
+        }
+
+
+        alert("Task updated successfully!");
+
+
+        document.getElementById(
+            "updateTaskForm"
+        ).style.display = "none";
+
+
+        await loadTasks();
+
+
+    } catch (error) {
+
+        console.error(
+            "Update error:",
+            error
+        );
+
+        alert(
+            "Unable to update task."
+        );
+
+    }
+}
+
+        /* =========================
+           DELETE TASK
+        ========================== */
+
+        async function deleteTask(taskId) {
+
+            if (
+                !confirm(
+                    "Are you sure you want to delete this task?"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/api/tasks/${taskId}`,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+                 
+
+                const result =
+                    await response.json();
+
+
+                alert(
+                    result.message ||
+                    "Task deleted successfully."
+                );
+
+
+                await loadTasks();
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to delete task."
+                );
+
+            }
+
+        }
+
+
+
+        /* =========================
+           UPDATE DASHBOARD
+        ========================== */
+
+        function updateDashboard(tasks) {
+
+
+            // Total tasks
+
+            document
+                .getElementById("totalTasks")
+                .textContent =
+                tasks.length;
+
+
+
+            // Pending tasks
+
+            const pending =
+                tasks.filter(function(task) {
+
+                    return (
+                        task.status &&
+                        task.status
+                            .toLowerCase()
+                        === "pending"
+                    );
+
+                }).length;
+
+
+            document
+                .getElementById("pendingTasks")
+                .textContent =
+                pending;
+
+
+
+            // Completed tasks
+
+            const completed =
+                tasks.filter(function(task) {
+
+                    return (
+                        task.status &&
+                        task.status
+                            .toLowerCase()
+                        === "completed"
+                    );
+
+                }).length;
+
+
+            document
+                .getElementById("completedTasks")
+                .textContent =
+                completed;
+
+
+
+            // High-priority tasks
+
+            const highPriority =
+                tasks.filter(function(task) {
+
+                    return (
+                        task.priority &&
+                        task.priority
+                            .toLowerCase()
+                        === "high"
+                    );
+
+                }).length;
+
+
+            document
+                .getElementById("highPriorityTasks")
+                .textContent =
+                highPriority;
+
+        }
+
+
+
+        /* =========================
+           TEXT → TASK
+        ========================== */
+
+        async function createTaskFromText() {
+
+            const text =
+                document
+                    .getElementById(
+                        "textTaskInput"
+                    )
+                    .value
+                    .trim();
+
+
+            if (!text) {
+
+                alert(
+                    "Please enter some text."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/text-to-task",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body: JSON.stringify({
+
+                                text: text
+
+                            })
+
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                document
+                    .getElementById(
+                        "textTaskResult"
+                    )
+                    .textContent =
+                    JSON.stringify(
+                        result,
+                        null,
+                        2
+                    );
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                document
+                    .getElementById(
+                        "textTaskResult"
+                    )
+                    .textContent =
+                    "Error: "
+                    + error.message;
+
+            }
+
+        }
+
+
+
+        /* =========================
+           VOICE → TASK
+        ========================== */
+
+        async function createVoiceTask() {
+
+            const file =
+                document
+                    .getElementById(
+                        "voiceTaskAudio"
+                    )
+                    .files[0];
+
+
+            if (!file) {
+
+                alert(
+                    "Please select an audio file."
+                );
+
+                return;
+
+            }
+
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "audio",
+                file
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/audio-to-text",
+                        {
+
+                            method: "POST",
+
+                            body: formData
+
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                const resultBox =
+                    document
+                        .getElementById(
+                            "voiceTaskResult"
+                        );
+
+
+                if (result.text) {
+
+                    resultBox.textContent =
+                        "Voice converted to text:\n\n"
+                        + result.text;
+
+                }
+
+
+                else {
+
+                    resultBox.textContent =
+                        JSON.stringify(
+                            result,
+                            null,
+                            2
+                        );
+
+                }
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                document
+                    .getElementById(
+                        "voiceTaskResult"
+                    )
+                    .textContent =
+                    "Error: "
+                    + error.message;
+
+            }
+
+        }
+
+
+
+        /* =========================
+           AUDIO → TEXT
+        ========================== */
+
+        async function convertAudioToText() {
+
+            const file =
+                document
+                    .getElementById(
+                        "audioTextFile"
+                    )
+                    .files[0];
+
+
+            if (!file) {
+
+                alert(
+                    "Please select an audio file."
+                );
+
+                return;
+
+            }
+
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "audio",
+                file
+            );
+
+
+            const resultBox =
+                document
+                    .getElementById(
+                        "audioTextResult"
+                    );
+
+
+            resultBox.textContent =
+                "Converting audio to text...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/audio-to-text",
+                        {
+
+                            method: "POST",
+
+                            body: formData
+
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (result.text) {
+
+                    resultBox.textContent =
+                        result.text;
+
+                }
+
+
+                else {
+
+                    resultBox.textContent =
+                        JSON.stringify(
+                            result,
+                            null,
+                            2
+                        );
+
+                }
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                resultBox.textContent =
+                    "Error: "
+                    + error.message;
+
+            }
+
+        }
+
+
+
+        /* =========================
+           TEXT → AUDIO
+        ========================== */
+
+        async function convertTextToAudio() {
+
+            const text =
+                document
+                    .getElementById(
+                        "textAudioInput"
+                    )
+                    .value
+                    .trim();
+
+
+            if (!text) {
+
+                alert(
+                    "Please enter some text."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/text-to-audio",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body: JSON.stringify({
+
+                                text: text
+
+                            })
+
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                const resultBox =
+                    document
+                        .getElementById(
+                            "textAudioResult"
+                        );
+
+
+                resultBox.textContent =
+                    JSON.stringify(
+                        result,
+                        null,
+                        2
+                    );
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                document
+                    .getElementById(
+                        "textAudioResult"
+                    )
+                    .textContent =
+                    "Error: "
+                    + error.message;
+
+            }
+
+        }
+
+
+
+        /* =========================
+           MEDIA PROCESSING
+        ========================== */
+
+       async function processMedia() {
+
+           const file =
+                    document
+                       .getElementById("mediaFile")
+                         .files[0];
+
+            const resultBox =
+                document.getElementById("mediaResult");
+
+
+             if (!file) {
+
+                 resultBox.textContent =
+                   "Please select a file.";
+
+               return;
+
+                 }
+
+
+             const formData =
+                  new FormData();
+
+                  formData.append(
+                     "file",
+                      file
+                   );
+
+
+              resultBox.textContent =
+                    "Processing file...";
+
+
+                  try {
+
+                     const response =
+                        await fetch(
+                        "/api/media-processing",
+                         {
+                             method: "POST",
+                               body: formData
+                             }
+                       );
+
+
+                     const result =
+                       await response.json();
+
+
+                   if (!response.ok) {
+
+                     throw new Error(
+                        result.error ||
+                       "Media processing failed."
+                       );
+  
+                }
+
+
+                       resultBox.textContent =
+                        JSON.stringify(
+                             result,
+                              null,
+                                2
+                                );
+
+                               }
+
+
+                      catch (error) {
+
+                       console.error(
+                          "Media processing error:",
+                               error
+                           );
+
+                          resultBox.textContent =
+                           "Error: " +
+                         error.message;
+
+                     }
+
+                      }
+
+
+
+        /* =========================
+           LOAD DASHBOARD
+           WHEN PAGE OPENS
+        ========================== */
+
+        loadTasks();
+
+
+    </script>
+
+
+</div>
+
 
 </body>
+
 </html>

@@ -1,6 +1,14 @@
 __pycache__/
 *.pyc
-task.db
+
+task.db\
+
 uploads/
+generated_audio/
 .env
+.venv/
+vev/
+
 terminal.py
+
+.ipynb_checkpoints/
